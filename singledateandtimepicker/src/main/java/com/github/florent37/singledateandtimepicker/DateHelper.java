@@ -56,9 +56,10 @@ public class DateHelper {
 
     public int getHour(Date date, boolean isAmPm) {
         if (isAmPm) {
-            return getHourOfDay(date);
-        } else {
             return getHour(date);
+           
+        } else {
+            return getHourOfDay(date);
         }
     }
 
