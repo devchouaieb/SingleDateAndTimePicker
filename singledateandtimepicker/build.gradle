@@ -1,5 +1,9 @@
-apply plugin: 'com.android.library'
 
+
+plugins {
+    id 'com.android.library'
+    id 'maven-publish'
+}
 android {
     compileSdkVersion project.sdk
     namespace  'com.github.florent37.singledateandtimepicker'
@@ -9,13 +13,46 @@ android {
         versionCode 3
         versionName "1.2"
     }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
     lintOptions {
         abortOnError false
+    }
+    publishing {
+        publishing {
+            singleVariant("release") {
+                withSourcesJar()
+                withJavadocJar()
+            }
+        }
     }
 }
 
 dependencies {
     implementation "androidx.appcompat:appcompat:1.7.0"
+}
+afterEvaluate {
+
+    publishing {
+        publications {
+            release(MavenPublication) {
+
+                from components.release
+
+                groupId = 'com.github.florent37'
+                artifactId = 'singledateandtimepicker'
+                version = '2.8.4'
+
+
+            }
+        }
+    }
 }
 
 ext {
@@ -43,3 +80,5 @@ ext {
     allLicenses = ["Apache-2.0"]
 }
 
+//apply from: rootProject.file('gradle/install-v1.gradle')
+//apply from: rootProject.file('gradle/bintray-android-v1.gradle')
