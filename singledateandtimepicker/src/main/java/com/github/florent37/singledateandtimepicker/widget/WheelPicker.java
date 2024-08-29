@@ -174,12 +174,10 @@ public abstract class WheelPicker<V> extends View {
 
         scroller = new Scroller(getContext());
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.DONUT) {
-            ViewConfiguration conf = ViewConfiguration.get(getContext());
-            minimumVelocity = conf.getScaledMinimumFlingVelocity();
-            maximumVelocity = conf.getScaledMaximumFlingVelocity();
-            touchSlop = conf.getScaledTouchSlop();
-        }
+        ViewConfiguration conf = ViewConfiguration.get(getContext());
+        minimumVelocity = conf.getScaledMinimumFlingVelocity();
+        maximumVelocity = conf.getScaledMaximumFlingVelocity();
+        touchSlop = conf.getScaledTouchSlop();
 
         init();
         defaultValue = initDefault();
@@ -463,7 +461,7 @@ public abstract class WheelPicker<V> extends View {
                 int alpha =
                         (int) ((drawnCenterY - Math.abs(drawnCenterY - mDrawnItemCenterY)) * 1.0F / drawnCenterY
                                 * 255);
-                alpha = alpha < 0 ? 0 : alpha;
+                alpha = Math.max(alpha, 0);
                 paint.setAlpha(alpha);
             }
             // Correct item's drawn centerY base on curved state
@@ -633,7 +631,7 @@ public abstract class WheelPicker<V> extends View {
             ValueAnimator va = ValueAnimator.ofInt(scrollOffsetY, newScrollOffsetY);
             va.setDuration(300);
             va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                public void onAnimationUpdate(ValueAnimator animation) {
+                public void onAnimationUpdate(@NonNull ValueAnimator animation) {
                     scrollOffsetY = (int) animation.getAnimatedValue();
                     invalidate();
                 }
@@ -997,7 +995,7 @@ public abstract class WheelPicker<V> extends View {
         int formatItemInt = Integer.MIN_VALUE;
         try {
             formatItemInt = Integer.parseInt(formatItem);
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException ignored) {
         }
 
         final int itemCount = adapter.getItemCount();

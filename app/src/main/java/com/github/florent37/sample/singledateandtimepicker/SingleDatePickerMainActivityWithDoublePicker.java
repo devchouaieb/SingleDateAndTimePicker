@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.github.florent37.singledateandtimepicker.SingleDateAndTimePicker;
 import com.github.florent37.singledateandtimepicker.dialog.DoubleDateAndTimePickerDialog;
 import com.github.florent37.singledateandtimepicker.dialog.SingleDateAndTimePickerDialog;
@@ -16,26 +18,18 @@ import java.util.Locale;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
-import androidx.appcompat.app.AppCompatActivity;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class SingleDatePickerMainActivityWithDoublePicker extends AppCompatActivity {
 
-    @BindView(R.id.doubleText)
     TextView doubleText;
 
-    @BindView(R.id.singleText)
     TextView singleText;
 
-    @BindView(R.id.singleTimeText)
     TextView singleTimeText;
 
-    @BindView(R.id.singleDateText)
     TextView singleDateText;
 
-    @BindView(R.id.singleDateLocaleText)
+
     TextView singleDateLocaleText;
 
 
@@ -53,7 +47,12 @@ public class SingleDatePickerMainActivityWithDoublePicker extends AppCompatActiv
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.single_date_picker_activity_main_double_picker);
-        ButterKnife.bind(this);
+        doubleText = findViewById(R.id.doubleText);
+
+        singleText = findViewById(R.id.singleText);
+        singleTimeText = findViewById(R.id.singleTimeText);
+        singleDateText = findViewById(R.id.singleDateText);
+        singleDateLocaleText = findViewById(R.id.singleDateLocaleText);
 
         this.simpleDateFormat = new SimpleDateFormat("EEE d MMM HH:mm", Locale.getDefault());
 
@@ -62,6 +61,26 @@ public class SingleDatePickerMainActivityWithDoublePicker extends AppCompatActiv
         this.simpleDateOnlyFormat = new SimpleDateFormat("EEE d MMM", Locale.getDefault());
 
         this.simpleDateLocaleFormat = new SimpleDateFormat("EEE d MMM", Locale.GERMAN);
+
+    findViewById(R.id.single_time_dialog_layout).setOnClickListener(view ->  {
+        simpleTimeClicked();
+    });
+    findViewById(R.id.single_date_dialog_layout).setOnClickListener(view -> {
+        simpleDateClicked();
+    });
+
+    findViewById(R.id.single_dialog_layout).setOnClickListener(view -> {
+        simpleClicked();
+    });
+
+    findViewById(R.id.double_dialog_layout).setOnClickListener(view -> {
+        doubleClicked();
+    });
+
+
+    findViewById(R.id.single_date_dialog_german_layout).setOnClickListener(view -> {
+        singleDateLocaleClicked();
+    });
     }
 
     @Override
@@ -75,7 +94,6 @@ public class SingleDatePickerMainActivityWithDoublePicker extends AppCompatActiv
 
 
     /* TODO Working on it */
-    @OnClick(R.id.single_time_dialog_layout)
     public void simpleTimeClicked() {
 
         Date date = new Date();
@@ -127,7 +145,7 @@ public class SingleDatePickerMainActivityWithDoublePicker extends AppCompatActiv
     }
 
 
-    @OnClick(R.id.single_date_dialog_layout)
+
     public void simpleDateClicked() {
 
         final Calendar calendar = Calendar.getInstance();
@@ -156,7 +174,6 @@ public class SingleDatePickerMainActivityWithDoublePicker extends AppCompatActiv
         singleBuilder.display();
     }
 
-    @OnClick(R.id.single_dialog_layout)
     public void simpleClicked() {
 
         final Calendar calendar = Calendar.getInstance();
@@ -215,7 +232,6 @@ public class SingleDatePickerMainActivityWithDoublePicker extends AppCompatActiv
         singleBuilder.display();
     }
 
-    @OnClick(R.id.double_dialog_layout)
     public void doubleClicked() {
 
         final Date now = new Date();
@@ -264,7 +280,6 @@ public class SingleDatePickerMainActivityWithDoublePicker extends AppCompatActiv
         doubleBuilder.display();
     }
 
-    @OnClick(R.id.single_date_dialog_german_layout)
     public void singleDateLocaleClicked() {
         singleBuilder = new SingleDateAndTimePickerDialog.Builder(this)
                 .customLocale(Locale.GERMAN)
